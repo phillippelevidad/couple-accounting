@@ -21,18 +21,14 @@ namespace Persistence
         {
             var model = DbPaymentSource.From(paymentSource);
             context.PaymentSources.Add(model);
-            await context.SaveChangesAsync(cancellationToken);
-
-            return Result.Ok();
+            return await context.SaveChangesWithResultAsync(cancellationToken);
         }
 
         public async Task<Result> DeleteAsync(Guid id, CancellationToken cancellationToken)
         {
             var model = await context.PaymentSources.FindAsync(new object[] { id }, cancellationToken);
             model.IsDeleted = true;
-            await context.SaveChangesAsync(cancellationToken);
-
-            return Result.Ok();
+            return await context.SaveChangesWithResultAsync(cancellationToken);
         }
 
         public async Task<PaymentSource> FindAsync(Guid id, CancellationToken cancellationToken)
@@ -45,9 +41,7 @@ namespace Persistence
         {
             var model = await context.PaymentSources.FindAsync(new object[] { paymentSource.Id }, cancellationToken);
             model.UpdateFrom(paymentSource);
-            await context.SaveChangesAsync(cancellationToken);
-
-            return Result.Ok();
+            return await context.SaveChangesWithResultAsync(cancellationToken);
         }
     }
 }

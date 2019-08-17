@@ -26,7 +26,7 @@ namespace Persistence
 
         public async Task<Result> DeleteAsync(Guid id, CancellationToken cancellationToken)
         {
-            var model = await context.Payments.FindAsync(new[] { id }, cancellationToken);
+            var model = await context.Payments.FindAsync(new object[] { id }, cancellationToken);
             context.Payments.Remove(model);
             return await context.SaveChangesWithResultAsync(cancellationToken);
         }
