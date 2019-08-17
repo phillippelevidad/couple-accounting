@@ -1,0 +1,5 @@
+﻿# create migration
+dotnet ef migrations add Initial --project Persistence --startup-project WebApi -o "Data/Migrations" --verbose
+
+# uupdate database
+dotnet ef database update --project Persistence --startup-project WebApi --verbose
