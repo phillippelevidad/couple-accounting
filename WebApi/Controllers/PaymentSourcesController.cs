@@ -22,7 +22,7 @@ namespace WebApi.Controllers
         {
             if (id == Guid.Empty)
             {
-                ModelState.AddModelError(nameof(id), "Must not be an empty Guid.");
+                ModelState.AddModelError(nameof(id), "The id must be provided.");
                 return BadRequest(ModelState);
             }
 
