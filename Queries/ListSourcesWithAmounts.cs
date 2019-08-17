@@ -32,16 +32,9 @@ namespace Queries
 
         public class SourceItem
         {
-            public SourceItem(Guid id, string name, decimal total)
-            {
-                Id = id;
-                Name = name;
-                Total = total;
-            }
-
-            public Guid Id { get; }
-            public string Name { get; }
-            public decimal Total { get; }
+            public Guid Id { get; private set; }
+            public string Name { get; private set; }
+            public decimal Total { get; private set; }
         }
     }
 
@@ -67,7 +60,7 @@ namespace Queries
             SELECT PaymentSources.Id, PaymentSources.Name, SUM(Payments.Amount) Total
             FROM PaymentSources
             INNER JOIN Payments ON PaymentSources.Id = Payments.SourceId
-            WHERE PaymentSource.IsDeleted = 0
+            WHERE PaymentSources.IsDeleted = 0
                 AND Payments.DateTime >= @start AND Payments.DateTime <= @end";
     }
 }
