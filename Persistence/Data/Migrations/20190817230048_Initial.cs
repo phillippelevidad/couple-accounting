@@ -8,6 +8,19 @@ namespace Persistence.Data.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "Categories",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    Name = table.Column<string>(maxLength: 50, nullable: false),
+                    IsDeleted = table.Column<bool>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Categories", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "PaymentSources",
                 columns: table => new
                 {
@@ -26,6 +39,7 @@ namespace Persistence.Data.Migrations
                 {
                     Id = table.Column<Guid>(nullable: false),
                     SourceId = table.Column<Guid>(nullable: false),
+                    CategoryId = table.Column<Guid>(nullable: false),
                     DateTime = table.Column<DateTimeOffset>(nullable: false),
                     Amount = table.Column<string>(type: "decimal(11,2)", nullable: true)
                 },
@@ -33,12 +47,23 @@ namespace Persistence.Data.Migrations
                 {
                     table.PrimaryKey("PK_Payments", x => x.Id);
                     table.ForeignKey(
+                        name: "FK_Payments_Categories_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Categories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
                         name: "FK_Payments_PaymentSources_SourceId",
                         column: x => x.SourceId,
                         principalTable: "PaymentSources",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Payments_CategoryId",
+                table: "Payments",
+                column: "CategoryId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Payments_SourceId",
@@ -50,6 +75,9 @@ namespace Persistence.Data.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Payments");
+
+            migrationBuilder.DropTable(
+                name: "Categories");
 
             migrationBuilder.DropTable(
                 name: "PaymentSources");

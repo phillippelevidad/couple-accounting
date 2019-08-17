@@ -10,7 +10,7 @@ using Persistence.Data;
 namespace Persistence.Data.Migrations
 {
     [DbContext(typeof(AccountingContext))]
-    [Migration("20190817015415_Initial")]
+    [Migration("20190817230048_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -18,6 +18,22 @@ namespace Persistence.Data.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "2.2.6-servicing-10079");
+
+            modelBuilder.Entity("Persistence.Data.DbCategory", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<bool>("IsDeleted");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Categories");
+                });
 
             modelBuilder.Entity("Persistence.Data.DbPayment", b =>
                 {
@@ -27,11 +43,15 @@ namespace Persistence.Data.Migrations
                     b.Property<Money>("Amount")
                         .HasColumnType("decimal(11,2)");
 
+                    b.Property<Guid>("CategoryId");
+
                     b.Property<DateTimeOffset>("DateTime");
 
                     b.Property<Guid>("SourceId");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
 
                     b.HasIndex("SourceId");
 
@@ -56,6 +76,11 @@ namespace Persistence.Data.Migrations
 
             modelBuilder.Entity("Persistence.Data.DbPayment", b =>
                 {
+                    b.HasOne("Persistence.Data.DbCategory", "Category")
+                        .WithMany("Payments")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("Persistence.Data.DbPaymentSource", "Source")
                         .WithMany("Payments")
                         .HasForeignKey("SourceId")

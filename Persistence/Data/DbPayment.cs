@@ -43,7 +43,7 @@ namespace Persistence.Data
         public void Configure(ModelBuilder modelBuilder)
         {
             var entity = modelBuilder.Entity<DbPayment>().ToTable("Payments");
-            entity.Property(e => e.Amount).HasColumnType(ModelConfiguration.MoneyColumnTypeName);
+            entity.Property(e => e.Amount).HasColumnType(ModelConfiguration.MoneyColumnType);
             entity.HasOne(e => e.Source).WithMany(source => source.Payments).OnDelete(DeleteBehavior.Restrict);
             entity.HasOne(e => e.Category).WithMany(category => category.Payments).OnDelete(DeleteBehavior.Restrict);
         }

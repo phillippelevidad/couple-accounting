@@ -17,6 +17,22 @@ namespace Persistence.Data.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "2.2.6-servicing-10079");
 
+            modelBuilder.Entity("Persistence.Data.DbCategory", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<bool>("IsDeleted");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Categories");
+                });
+
             modelBuilder.Entity("Persistence.Data.DbPayment", b =>
                 {
                     b.Property<Guid>("Id")
@@ -25,11 +41,15 @@ namespace Persistence.Data.Migrations
                     b.Property<Money>("Amount")
                         .HasColumnType("decimal(11,2)");
 
+                    b.Property<Guid>("CategoryId");
+
                     b.Property<DateTimeOffset>("DateTime");
 
                     b.Property<Guid>("SourceId");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
 
                     b.HasIndex("SourceId");
 
@@ -54,6 +74,11 @@ namespace Persistence.Data.Migrations
 
             modelBuilder.Entity("Persistence.Data.DbPayment", b =>
                 {
+                    b.HasOne("Persistence.Data.DbCategory", "Category")
+                        .WithMany("Payments")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("Persistence.Data.DbPaymentSource", "Source")
                         .WithMany("Payments")
                         .HasForeignKey("SourceId")

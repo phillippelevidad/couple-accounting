@@ -10,6 +10,7 @@ namespace Persistence.Data
         public Guid Id { get; set; }
         public string Name { get; set; }
         public bool IsDeleted { get; internal set; }
+
         public ICollection<DbPayment> Payments { get; private set; } = new List<DbPayment>();
 
         public override Category ToDomainModel()
