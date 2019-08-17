@@ -2,7 +2,7 @@
 
 namespace Domain
 {
-    public class Money : ValueObject<Money>
+    public sealed class Money : ValueObject<Money>
     {
         public Money(decimal amount)
         {

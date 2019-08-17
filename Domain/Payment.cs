@@ -2,7 +2,7 @@
 
 namespace Domain
 {
-    public class Payment : AggregateRoot
+    public sealed class Payment : AggregateRoot
     {
         private Payment() { }
 
