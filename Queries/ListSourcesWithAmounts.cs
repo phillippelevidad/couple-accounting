@@ -32,9 +32,9 @@ namespace Queries
 
         public class SourceItem
         {
-            public Guid Id { get; private set; }
-            public string Name { get; private set; }
-            public decimal Total { get; private set; }
+            public Guid Id { get; set; }
+            public string Name { get; set; }
+            public decimal Total { get; set; }
         }
     }
 
@@ -51,16 +51,16 @@ namespace Queries
         {
             using (var conn = connectionFactory.Create())
             {
-                var sourcesWithAmounts = await conn.QueryAsync<ListSourcesWithAmountsResult.SourceItem>(sql, new { request.Start, request.End });
+                var sourcesWithAmounts = await conn.QueryAsync<ListSourcesWithAmountsResult.SourceItem>(sql, new { start = request.Start, end = request.End });
                 return new ListSourcesWithAmountsResult(sourcesWithAmounts);
             }
         }
 
         private const string sql = @"
-            SELECT PaymentSources.Id, PaymentSources.Name, SUM(Payments.Amount) Total
+            SELECT PaymentSources.Id, PaymentSources.Name, IFNULL(SUM(Payments.Amount), 0) Total
             FROM PaymentSources
-            INNER JOIN Payments ON PaymentSources.Id = Payments.SourceId
-            WHERE PaymentSources.IsDeleted = 0
-                AND Payments.DateTime >= @start AND Payments.DateTime <= @end";
+            LEFT JOIN Payments ON PaymentSources.Id = Payments.SourceId
+                AND Payments.DateTime >= @start AND Payments.DateTime <= @end
+            WHERE PaymentSources.IsDeleted = 0";
     }
 }
