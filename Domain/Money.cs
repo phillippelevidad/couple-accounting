@@ -21,6 +21,11 @@ namespace Domain
             return 1233020415 + Amount.GetHashCode();
         }
 
+        public static Money Of(decimal amount)
+        {
+            return new Money(amount);
+        }
+
         public static Money operator +(Money a, Money b)
         {
             return new Money(a.Amount + b.Amount);
@@ -39,6 +44,11 @@ namespace Domain
         public static Money operator /(Money a, Money b)
         {
             return new Money(a.Amount / b.Amount);
+        }
+
+        public static explicit operator Money(decimal amount)
+        {
+            return new Money(amount);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Application;
+using Domain;
 using Microsoft.AspNetCore.Mvc;
 using Queries;
 using System;
@@ -81,6 +82,8 @@ namespace WebApi.Controllers
     {
         public Guid Id { get; set; }
 
+        public Guid SourceId { get; set; }
+
         public DateTimeOffset DateTime { get; set; }
 
         [Range(0.01, 999_999_999.99)]
@@ -90,7 +93,7 @@ namespace WebApi.Controllers
 
         public RegisterPayment ToRegisterCommand()
         {
-            throw new NotImplementedException();
+            return new RegisterPayment(Id, SourceId, DateTime, Money.Of(Amount));
         }
     }
 }
