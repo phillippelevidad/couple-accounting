@@ -8,9 +8,11 @@ namespace Persistence.Data
     {
         public Guid Id { get; private set; }
         public Guid SourceId { get; private set; }
+        public Guid CategoryId { get; private set; }
         public DateTimeOffset DateTime { get; private set; }
         public Money Amount { get; private set; }
         public DbPaymentSource Source { get; private set; }
+        public DbCategory Category { get; private set; }
 
         public override Payment ToDomainModel()
         {
@@ -27,9 +29,10 @@ namespace Persistence.Data
             return new DbPayment
             {
                 Id = payment.Id,
-                Amount = payment.Amount,
-                DateTime = payment.DateTime,
                 SourceId = payment.SourceId,
+                CategoryId = payment.CategoryId,
+                DateTime = payment.DateTime,
+                Amount = payment.Amount,
                 AggregateRoot = payment
             };
         }
@@ -42,6 +45,7 @@ namespace Persistence.Data
             var entity = modelBuilder.Entity<DbPayment>().ToTable("Payments");
             entity.Property(e => e.Amount).HasColumnType(ModelConfiguration.MoneyColumnTypeName);
             entity.HasOne(e => e.Source).WithMany(source => source.Payments).OnDelete(DeleteBehavior.Restrict);
+            entity.HasOne(e => e.Category).WithMany(category => category.Payments).OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

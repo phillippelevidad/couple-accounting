@@ -47,14 +47,14 @@ namespace WebApi.Controllers
         [HttpGet()]
         public async Task<IActionResult> ListAsync(DateTime? start = null, DateTime? end = null, int startIndex = 0, int pageSize = 30)
         {
-            startIndex = Math.Max(startIndex, 0);
-            pageSize = Math.Min(pageSize, 100);
-
             if (start == null)
-                start = DateTime.Today.AddDays(-30);
+                start = DateHelpers.MonthStart();
 
             if (end == null)
-                end = DateTime.Today.AddDays(1);
+                end = DateHelpers.MonthEnd();
+
+            startIndex = Math.Max(startIndex, 0);
+            pageSize = Math.Min(pageSize, 100);
 
             var query = new ListPayments(start.Value, end.Value, new Paging(startIndex, pageSize));
             var result = await queries.RunAsync(query);
@@ -84,6 +84,8 @@ namespace WebApi.Controllers
 
         public Guid SourceId { get; set; }
 
+        public Guid CategoryId { get; set; }
+
         public DateTimeOffset DateTime { get; set; }
 
         [Range(0.01, 999_999_999.99)]
@@ -93,7 +95,7 @@ namespace WebApi.Controllers
 
         public RegisterPayment ToRegisterCommand()
         {
-            return new RegisterPayment(Id, SourceId, DateTime, Money.Of(Amount));
+            return new RegisterPayment(Id, SourceId, CategoryId, DateTime, Money.Of(Amount));
         }
     }
 }

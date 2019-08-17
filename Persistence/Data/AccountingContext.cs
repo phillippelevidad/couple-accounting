@@ -19,6 +19,7 @@ namespace Persistence.Data
             this.mediator = mediator;
         }
 
+        public DbSet<DbCategory> Categories { get; set; }
         public DbSet<DbPayment> Payments { get; set; }
         public DbSet<DbPaymentSource> PaymentSources { get; set; }
 

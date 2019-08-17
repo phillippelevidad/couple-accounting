@@ -1,5 +1,6 @@
 ﻿using Application;
 using Microsoft.AspNetCore.Mvc;
+using Queries;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
@@ -11,10 +12,12 @@ namespace WebApi.Controllers
     public class PaymentSourcesController : ControllerBase
     {
         private readonly Commands commands;
+        private readonly Queries queries;
 
-        public PaymentSourcesController(Commands commands)
+        public PaymentSourcesController(Commands commands, Queries queries)
         {
             this.commands = commands;
+            this.queries = queries;
         }
 
         [HttpDelete("{id}")]
@@ -70,6 +73,19 @@ namespace WebApi.Controllers
             }
 
             return BadRequest(ModelState);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Summary(DateTime? start, DateTime? end)
+        {
+            if (start == null)
+                start = DateHelpers.MonthStart();
+
+            if (end == null)
+                end = DateHelpers.MonthEnd();
+
+            var result = await queries.RunAsync(new ListSourcesWithAmounts(start.Value, end.Value));
+            return Ok(result);
         }
     }
 
