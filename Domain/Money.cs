@@ -48,7 +48,7 @@ namespace Domain
 
         public static explicit operator Money(decimal amount)
         {
-            return new Money(amount);
+            return Of(amount);
         }
     }
 }
