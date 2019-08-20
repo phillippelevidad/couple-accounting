@@ -51,16 +51,16 @@ namespace Queries
         {
             using (var conn = connectionFactory.Create())
             {
-                var categoriesWithAmounts = await conn.QueryAsync<ListCategoriesWithAmountsResult.CategoryItem>(sql, new { request.Start, request.End });
+                var categoriesWithAmounts = await conn.QueryAsync<ListCategoriesWithAmountsResult.CategoryItem>(sql, new { start = request.Start, end = request.End });
                 return new ListCategoriesWithAmountsResult(categoriesWithAmounts);
             }
         }
 
         private const string sql = @"
-            SELECT Categories.Id, Categories.Name, SUM(Payments.Amount) Total
+            SELECT Categories.Id, Categories.Name, IFNULL(SUM(Payments.Amount), 0) Total
             FROM Categories
             INNER JOIN Payments ON Categories.Id = Payments.CategoryId
-            WHERE Categories.IsDeleted = 0
-                AND Payments.DateTime >= @start AND Payments.DateTime <= @end";
+                AND Payments.DateTime >= @start AND Payments.DateTime <= @end
+            WHERE Categories.IsDeleted = 0";
     }
 }

@@ -1,5 +1,5 @@
-﻿using Microsoft.Data.Sqlite;
-using System.Data;
+﻿using System.Data;
+using System.Data.SQLite;
 
 namespace Queries
 {
@@ -14,7 +14,9 @@ namespace Queries
 
         public IDbConnection Create()
         {
-            return new SqliteConnection(connectionString.Value);
+            var builder = new SQLiteConnectionStringBuilder(connectionString.Value) { BinaryGUID = true };
+            var connStr = builder.ToString();
+            return new SQLiteConnection(connStr);
         }
     }
 

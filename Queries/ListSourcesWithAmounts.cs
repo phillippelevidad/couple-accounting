@@ -32,9 +32,9 @@ namespace Queries
 
         public class SourceItem
         {
-            public Guid Id { get; set; }
-            public string Name { get; set; }
-            public decimal Total { get; set; }
+            public Guid Id { get; private set; }
+            public string Name { get; private set; }
+            public decimal Total { get; private set; }
         }
     }
 
@@ -57,7 +57,7 @@ namespace Queries
         }
 
         private const string sql = @"
-            SELECT PaymentSources.Id, PaymentSources.Name, IFNULL(SUM(Payments.Amount), 0) Total
+            SELECT PaymentSources.Id, PaymentSources.Name, IFNULL(Payments.Amount, 0) Total
             FROM PaymentSources
             LEFT JOIN Payments ON PaymentSources.Id = Payments.SourceId
                 AND Payments.DateTime >= @start AND Payments.DateTime <= @end

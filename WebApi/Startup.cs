@@ -1,4 +1,5 @@
 ﻿using Application;
+using Dapper;
 using Domain;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
@@ -10,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Persistence;
 using Persistence.Data;
 using Queries;
+using System;
 
 namespace WebApi
 {
@@ -60,6 +62,7 @@ namespace WebApi
         {
             services.AddSingleton(new AccountingConnectionString(Configuration.GetConnectionString(connectionStringName)));
             services.AddTransient<ConnectionFactory>();
+            SqlMapper.AddTypeHandler<Guid>(new GuidTypeHandler());
         }
 
         private void AddMediator(IServiceCollection services)
