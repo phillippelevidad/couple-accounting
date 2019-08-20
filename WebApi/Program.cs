@@ -19,6 +19,12 @@ namespace WebApi
 
     internal class CurrentDirectoryHelpers
     {
+        /* This is for SQLite databases to work in development mode.
+         * There's an issue with aspnet core that sets the base directory path to that of IIS.
+         * This class detects the issue and fixes the path to correctly point to the app directory.
+         * See more at https://github.com/aspnet/AspNetCore.Docs/issues/9865
+         */
+
         internal const string AspNetCoreModuleDll = "aspnetcorev2_inprocess.dll";
         [System.Runtime.InteropServices.DllImport("kernel32.dll")]
         private static extern IntPtr GetModuleHandle(string lpModuleName);
