@@ -59,7 +59,7 @@ namespace Queries
         private const string sql = @"
             SELECT Categories.Id, Categories.Name, IFNULL(SUM(Payments.Amount), 0) Total
             FROM Categories
-            INNER JOIN Payments ON Categories.Id = Payments.CategoryId
+            LEFT JOIN Payments ON Categories.Id = Payments.CategoryId
                 AND Payments.DateTime >= @start AND Payments.DateTime <= @end
             WHERE Categories.IsDeleted = 0";
     }

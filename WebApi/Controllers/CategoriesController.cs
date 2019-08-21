@@ -75,7 +75,7 @@ namespace WebApi.Controllers
             return BadRequest(ModelState);
         }
 
-        [HttpGet]
+        [HttpGet("summary")]
         public async Task<IActionResult> Summary(DateTime? start, DateTime? end)
         {
             if (start == null)

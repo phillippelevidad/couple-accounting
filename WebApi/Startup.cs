@@ -54,6 +54,7 @@ namespace WebApi
         private void AddPersistence(IServiceCollection services)
         {
             services.AddDbContext<AccountingContext>(options => options.UseSqlite(Configuration.GetConnectionString(connectionStringName)));
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IPaymentRepository, PaymentRepository>();
             services.AddScoped<IPaymentSourceRepository, PaymentSourceRepository>();
         }

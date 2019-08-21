@@ -10,7 +10,7 @@ namespace Persistence.Data
         public Guid SourceId { get; private set; }
         public Guid CategoryId { get; private set; }
         public DateTimeOffset DateTime { get; private set; }
-        public Money Amount { get; private set; }
+        public decimal Amount { get; private set; }
         public DbPaymentSource Source { get; private set; }
         public DbCategory Category { get; private set; }
 

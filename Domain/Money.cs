@@ -50,5 +50,10 @@ namespace Domain
         {
             return Of(amount);
         }
+
+        public static implicit operator decimal(Money money)
+        {
+            return money.Amount;
+        }
     }
 }
