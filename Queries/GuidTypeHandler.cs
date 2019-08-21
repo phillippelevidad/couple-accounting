@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using System;
+using System.Data;
 
 namespace Queries
 {
@@ -15,6 +16,20 @@ namespace Queries
         {
             var guidAsBytes = value.ToByteArray();
             parameter.Value = guidAsBytes;
+        }
+    }
+
+    public class DateTimeOffsetTypeHandler : SqlMapper.TypeHandler<DateTimeOffset>
+    {
+        public override DateTimeOffset Parse(object value)
+        {
+            return DateTimeOffset.Parse((string)value);
+        }
+
+        public override void SetValue(IDbDataParameter parameter, DateTimeOffset value)
+        {
+            var serialized = value.ToString("O");
+            parameter.Value = serialized;
         }
     }
 }

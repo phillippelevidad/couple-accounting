@@ -63,7 +63,9 @@ namespace WebApi
         {
             services.AddSingleton(new AccountingConnectionString(Configuration.GetConnectionString(connectionStringName)));
             services.AddTransient<ConnectionFactory>();
-            SqlMapper.AddTypeHandler<Guid>(new GuidTypeHandler());
+
+            SqlMapper.AddTypeHandler(new GuidTypeHandler());
+            SqlMapper.AddTypeHandler(new DateTimeOffsetTypeHandler());
         }
 
         private void AddMediator(IServiceCollection services)

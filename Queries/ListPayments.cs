@@ -34,11 +34,11 @@ namespace Queries
         public class PaymentDto
         {
             public Guid Id { get; private set; }
+            public Guid SourceId { get; private set; }
+            public Guid CategoryId { get; private set; }
             public DateTimeOffset DateTime { get; private set; }
             public decimal Amount { get; private set; }
-            public Guid SourceId { get; private set; }
             public string SourceName { get; private set; }
-            public Guid CategoryId { get; private set; }
             public string CategoryName { get; private set; }
         }
     }
@@ -66,10 +66,11 @@ namespace Queries
             SELECT 
                 Payments.Id, Payments.DateTime, Payments.Amount,
                 PaymentSources.Id SourceId, PaymentSources.Name SourceName,
-                Categories.Id CategoryId, Category.Name CategoryName
+                Categories.Id CategoryId, Categories.Name CategoryName
             FROM Payments
             INNER JOIN PaymentSources ON Payments.SourceId = PaymentSources.Id
             INNER JOIN Categories ON Payments.CategoryId = Categories.Id
-            WHERE Payments.DateTime >= @start AND Payments.DateTime <= @end";
+            WHERE Payments.DateTime >= @start AND Payments.DateTime <= @end
+            LIMIT @pageSize OFFSET @startIndex";
     }
 }
